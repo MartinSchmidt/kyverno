@@ -37,6 +37,15 @@ func Test_CheckKind(t *testing.T) {
 	match = CheckKind(subresourceGVKToAPIResource, []string{"v1/Pod"}, schema.GroupVersionKind{Kind: "Pod", Group: "", Version: "v1"}, "ephemeralcontainers", false)
 	assert.Equal(t, match, false)
 
+	match = CheckKind(subresourceGVKToAPIResource, []string{"UpperCase"}, schema.GroupVersionKind{Kind: "UpperCase", Group: "", Version: "v1"}, "", false)
+	assert.Equal(t, match, true)
+
+	match = CheckKind(subresourceGVKToAPIResource, []string{"lowerCase"}, schema.GroupVersionKind{Kind: "lowerCase", Group: "", Version: "v1"}, "", false)
+	assert.Equal(t, match, true)
+
+	match = CheckKind(subresourceGVKToAPIResource, []string{"ShouldFailcase"}, schema.GroupVersionKind{Kind: "shouldFailcase", Group: "", Version: "v1"}, "", false)
+	assert.Equal(t, match, false)
+
 	subresourceGVKToAPIResource["networking.k8s.io/v1/NetworkPolicy/status"] = &metav1.APIResource{
 		Name:         "networkpolicies/status",
 		SingularName: "",
